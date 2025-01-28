@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            background-color: aqua;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: red;
+        }
+        .main {
+            display: flex;
+            background-color: wheat;
+            height: calc(100vh - 120px); /* Adjust height considering header and footer */
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #ccc;
+            padding: 20px;
+            border: 1px solid black;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>This is the implementation for header, footer, main, and sidebar</h1>
+    <header class="header">
+        <div>Left</div>
+        <div>Center</div>
+        <div>Right</div>
+    </header>
+    <div class="main">
+        <aside class="sidebar">
+            <p>Sidebar content goes here</p>
+        </aside>
+        <div class="content">
+            <p>Main content goes here</p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Footer content goes here</p>
+    </footer>
+</body>
+</html>
