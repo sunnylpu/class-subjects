@@ -1,13 +1,26 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/dist/styles.css" rel="stylesheet">
-</head>
-<body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="text-3xl font-bold underline text-clifford">
+      Hello world!
+    </h1>
+    <button class="bg-sky-500 hover:bg-sky-700 ...">Save changes</button>
+    <nav>
+      <ul>
+        <li class="bg-green-400 mx-4 py-4 font-bold">green</li>
+        <li></li>
+        <li></li>
+      </ul>
+    </nav>
+  </body>
 </html>
