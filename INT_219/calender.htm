@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Calendar with Event Reminders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/main.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/main.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #eventForm {
+            margin: 20px 0;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Digital Calendar with Event Reminders</h1>
+
+    <!-- Event Form -->
+    <div id="eventForm">
+        <input type="text" id="eventTitle" placeholder="Event Title">
+        <input type="datetime-local" id="eventDate">
+        <button onclick="addEvent()">Add Event</button>
+    </div>
+
+    <!-- Calendar -->
+    <div id="calendar"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                events: []
+            });
+            calendar.render();
+
+            // Function to add event
+            window.addEvent = function() {
+                let title = document.getElementById("eventTitle").value;
+                let date = document.getElementById("eventDate").value;
+
+                if (title && date) {
+                    let newEvent = {
+                        title: title,
+                        start: date,
+                        allDay: false
+                    };
+
+                    calendar.addEvent(newEvent);
+                    alert("Event added: " + title + " on " + date);
+
+                    // Store event in local storage
+                    let storedEvents = JSON.parse(localStorage.getItem("events")) || [];
+                    storedEvents.push(newEvent);
+                    localStorage.setItem("events", JSON.stringify(storedEvents));
+                } else {
+                    alert("Please enter event title and date!");
+                }
+            };
+
+            // Load events from local storage
+            let storedEvents = JSON.parse(localStorage.getItem("events")) || [];
+            storedEvents.forEach(event => calendar.addEvent(event));
+
+            // Reminder function (checks every minute)
+            setInterval(() => {
+                let now = new Date();
+                let storedEvents = JSON.parse(localStorage.getItem("events")) || [];
+
+                storedEvents.forEach(event => {
+                    let eventTime = new Date(event.start);
+                    let timeDiff = (eventTime - now) / (1000 * 60); // Difference in minutes
+
+                    if (timeDiff >= 0 && timeDiff < 1) {
+                        alert("Reminder: " + event.title + " is happening now!");
+                    }
+                });
+            }, 60000);
+        });
+    </script>
+
+</body>
+</html>
