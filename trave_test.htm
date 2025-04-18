@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - Travel Journal</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        .gallery-section {
+    padding: 40px 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.section-description {
+    text-align: center;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-caption {
+    padding: 15px;
+    background-color: white;
+}
+
+.gallery-caption h4 {
+    margin: 0 0 5px 0;
+    color: var(--primary-color);
+}
+
+.gallery-caption p {
+    margin: 0 0 10px 0;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.btn-small {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.3s;
+}
+
+.btn-small:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Map Section Styles */
+.map-section {
+    padding: 40px 0;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.map-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.map-info-panel {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    #map {
+        height: 300px;
+    }
+    
+    .map-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 i {
+            font-size: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .journal-entries {
+            grid-column: 1;
+        }
+
+        .sidebar {
+            grid-column: 2;
+        }
+
+        .entry-form, .ai-assistant, .entry {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .entry-form h3, .ai-assistant h3, .entry h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--light-color);
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .input-group input, 
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .input-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        #journalEntries {
+            margin-top: 30px;
+        }
+
+        .entry {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .entry-meta {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .entry-content {
+            line-height: 1.6;
+        }
+
+        .entry-footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .entry-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .entry-actions button:hover {
+            text-decoration: underline;
+        }
+
+        .ai-assistant {
+            position: sticky;
+            top: 20px;
+        }
+
+        .chat-container {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .bot-message {
+            background-color: var(--light-color);
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .journal-entries, .sidebar {
+                grid-column: 1;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            nav ul {
+                gap: 10px;
+            }
+            
+            .hero {
+                height: 200px;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* For image thumbnails */
+        .thumbnail {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        /* For tags/locations */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .tag {
+            background-color: var(--light-color);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7H9ZA2i83QLo6aZKzDU8moahSoaSu9cM&callback=initMap" async defer></script>
+
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-globe-americas"></i> Wanderlust</h1>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Journal</a></li>
+                <li><a href="#">Map</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h2>Capture Your Adventures</h2>
+            <p>Record your travel memories and get AI-powered travel recommendations</p>
+            <button class="btn" id="scrollToNewEntry">Create New Entry</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-layout">
+            <div class="journal-entries">
+                <div class="entry-form" id="entryForm">
+                    <h3>New Journal Entry</h3>
+                    <form id="journalForm">
+                        <div class="input-group">
+                            <label for="entryTitle">Title</label>
+                            <input type="text" id="entryTitle" required placeholder="Give your adventure a title">
+                        </div>
+                        <div class="input-group">
+                            <label for="entryDate">Date</label>
+                            <input type="date" id="entryDate" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="entryLocation">Location</label>
+                            <input type="text" id="entryLocation" placeholder="Where did you go?">
+                        </div>
+                        <div class="input-group">
+                            <label for="entryContent">Your Experience</label>
+                            <textarea id="entryContent" required placeholder="What did you see? How did you feel? What will you remember?"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="entryRating">Rate Your Experience (1-5)</label>
+                            <select id="entryRating">
+                                <option value="5">5 - Amazing!</option>
+                                <option value="4">4 - Great</option>
+                                <option value="3" selected>3 - Good</option>
+                                <option value="2">2 - Okay</option>
+                                <option value="1">1 - Not good</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Entry</button>
+                    </form>
+                </div>
+
+                <div id="journalEntries">
+                    <!-- Journal entries will be displayed here -->
+                    <h3>Your Travel Memories</h3>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="ai-assistant">
+                    <h3>Travel Assistant</h3>
+                    <div class="chat-container" id="chatContainer">
+                        <div class="message bot-message">
+                            Hello traveler! I'm your AI travel assistant. Ask me about destinations, travel tips, or recommendations for your next adventure!
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userQuestion" placeholder="Ask me anything about travel...">
+                        <button class="btn" id="askButton">Ask</button>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #7f8c8d;">
+                        <i class="fas fa-info-circle"></i> Tip: Ask about local cuisines, must-see attractions, or best times to visit your destination!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-section">
+            <h2 class="section-title">Explore India's Wonders</h2>
+            <p class="section-description">Get inspired by these breathtaking locations from across India</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Taj Mahal, Agra" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Taj Mahal</h4>
+                        <p>Agra, Uttar Pradesh</p>
+                        <button class="btn-small view-on-map" data-lat="27.1751" data-lng="78.0421">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Jaipur City Palace" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>City Palace</h4>
+                        <p>Jaipur, Rajasthan</p>
+                        <button class="btn-small view-on-map" data-lat="26.9255" data-lng="75.8236">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Varanasi Ghats" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Varanasi Ghats</h4>
+                        <p>Varanasi, Uttar Pradesh</p>
+                        <button class="btn-small view-on-map" data-lat="25.3176" data-lng="83.0064">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Mysore Palace" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Mysore Palace</h4>
+                        <p>Mysore, Karnataka</p>
+                        <button class="btn-small view-on-map" data-lat="12.3052" data-lng="76.6552">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Amber Fort" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Amber Fort</h4>
+                        <p>Jaipur, Rajasthan</p>
+                        <button class="btn-small view-on-map" data-lat="26.9855" data-lng="75.8513">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Hawa Mahal" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Hawa Mahal</h4>
+                        <p>Jaipur, Rajasthan</p>
+                        <button class="btn-small view-on-map" data-lat="26.9239" data-lng="75.8267">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Meenakshi Temple" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Meenakshi Temple</h4>
+                        <p>Madurai, Tamil Nadu</p>
+                        <button class="btn-small view-on-map" data-lat="9.9195" data-lng="78.1193">View on Map</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Gateway of India" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h4>Gateway of India</h4>
+                        <p>Mumbai, Maharashtra</p>
+                        <button class="btn-small view-on-map" data-lat="18.9217" data-lng="72.8347">View on Map</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mapSection" class="map-section">
+            <h2 class="section-title">Travel Map</h2>
+            <p class="section-description">Explore destinations and view your journal entries on the map</p>
+            
+            <div class="map-controls">
+                <button id="showJournalLocations" class="btn btn-primary">Show My Journal Locations</button>
+                <button id="showFamousPlaces" class="btn">Show Famous Places</button>
+            </div>
+            
+            <div id="map"></div>
+            
+            <div class="map-info-panel">
+                <h3>Travel Tips for Selected Location</h3>
+                <div id="locationInfo">
+                    <p>Select a location on the map to see travel tips and information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Wanderlust Travel Journal. All rights reserved.</p>
+        <p>Capture your journey, one memory at a time.</p>
+    </footer>
+
+    <script>
+        // Initialize local storage for journal entries if it doesn't exist
+        if (!localStorage.getItem('journalEntries')) {
+            localStorage.setItem('journalEntries', JSON.stringify([]));
+        }
+
+        // DOM Elements
+        const journalForm = document.getElementById('journalForm');
+        const journalEntriesContainer = document.getElementById('journalEntries');
+        const chatContainer = document.getElementById('chatContainer');
+        const userQuestion = document.getElementById('userQuestion');
+        const askButton = document.getElementById('askButton');
+        const scrollToNewEntry = document.getElementById('scrollToNewEntry');
+
+        // Scroll to new entry form
+        scrollToNewEntry.addEventListener('click', () => {
+            document.getElementById('entryForm').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Save a new journal entry
+        journalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const entryTitle = document.getElementById('entryTitle').value;
+            const entryDate = document.getElementById('entryDate').value;
+            const entryLocation = document.getElementById('entryLocation').value;
+            const entryContent = document.getElementById('entryContent').value;
+            const entryRating = document.getElementById('entryRating').value;
+            
+            const newEntry = {
+                id: Date.now().toString(),
+                title: entryTitle,
+                date: entryDate,
+                location: entryLocation,
+                content: entryContent,
+                rating: entryRating,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Get existing entries
+            const entries = JSON.parse(localStorage.getItem('journalEntries'));
+            
+            // Add new entry
+            entries.unshift(newEntry);
+            
+            // Save to local storage
+            localStorage.setItem('journalEntries', JSON.stringify(entries));
+            
+            // Reset form
+            journalForm.reset();
+            
+            // Update UI
+            displayJournalEntries();
+            
+            // Show success message
+            alert('Journal entry saved successfully!');
+        });
+
+        // Display journal entries
+        function displayJournalEntries() {
+            const entries = JSON.parse(localStorage.getItem('journalEntries'));
+            
+            // Clear the container except for the heading
+            while (journalEntriesContainer.childElementCount > 1) {
+                journalEntriesContainer.removeChild(journalEntriesContainer.lastChild);
+            }
+            
+            if (entries.length === 0) {
+                const noEntries = document.createElement('p');
+                noEntries.textContent = 'No journal entries yet. Start documenting your travels!';
+                journalEntriesContainer.appendChild(noEntries);
+                return;
+            }
+            
+            // Display each entry
+            entries.forEach(entry => {
+                const entryElement = document.createElement('div');
+                entryElement.className = 'entry';
+                entryElement.id = `entry-${entry.id}`;
+                
+                // Create star rating HTML
+                let starsHtml = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= entry.rating) {
+                        starsHtml += '<i class="fas fa-star" style="color: #f39c12;"></i>';
+                    } else {
+                        starsHtml += '<i class="far fa-star" style="color: #f39c12;"></i>';
+                    }
+                }
+                
+                entryElement.innerHTML = `
+                    <div class="entry-header">
+                        <h3>${entry.title}</h3>
+                        <div class="entry-meta">
+                            ${formatDate(entry.date)}
+                        </div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag"><i class="fas fa-map-marker-alt"></i> ${entry.location || 'No location specified'}</span>
+                        <span class="tag">${starsHtml}</span>
+                    </div>
+                    <div class="entry-content">
+                        ${entry.content.replace(/\n/g, '<br>')}
+                    </div>
+                    <div class="entry-footer">
+                        <div class="entry-actions">
+                            <button onclick="editEntry('${entry.id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button onclick="deleteEntry('${entry.id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `;
+                
+                journalEntriesContainer.appendChild(entryElement);
+            });
+        }
+
+        // Edit journal entry
+        window.editEntry = function(entryId) {
+            const entries = JSON.parse(localStorage.getItem('journalEntries'));
+            const entry = entries.find(e => e.id === entryId);
+            
+            if (!entry) return;
+            
+            // Fill the form with entry data
+            document.getElementById('entryTitle').value = entry.title;
+            document.getElementById('entryDate').value = entry.date;
+            document.getElementById('entryLocation').value = entry.location;
+            document.getElementById('entryContent').value = entry.content;
+            document.getElementById('entryRating').value = entry.rating;
+            
+            // Scroll to the form
+            document.getElementById('entryForm').scrollIntoView({ behavior: 'smooth' });
+            
+            // Add a hidden input for entry ID
+            let hiddenInput = document.getElementById('entryId');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.id = 'entryId';
+                journalForm.appendChild(hiddenInput);
+            }
+            hiddenInput.value = entryId;
+            
+            // Change the form submission behavior
+            journalForm.onsubmit = function(e) {
+                e.preventDefault();
+                
+                // Update the entry
+                const updatedEntry = {
+                    ...entry,
+                    title: document.getElementById('entryTitle').value,
+                    date: document.getElementById('entryDate').value,
+                    location: document.getElementById('entryLocation').value,
+                    content: document.getElementById('entryContent').value,
+                    rating: document.getElementById('entryRating').value,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                // Update in the entries array
+                const entryIndex = entries.findIndex(e => e.id === entryId);
+                entries[entryIndex] = updatedEntry;
+                
+                // Save to local storage
+                localStorage.setItem('journalEntries', JSON.stringify(entries));
+                
+                // Reset form and behavior
+                journalForm.reset();
+                journalForm.onsubmit = null;
+                hiddenInput.remove();
+                
+                // Re-add the default submit behavior
+                journalForm.addEventListener('submit', function(e) {
+                    // Original submit handler code
+                    e.preventDefault();
+                    
+                    const entryTitle = document.getElementById('entryTitle').value;
+                    const entryDate = document.getElementById('entryDate').value;
+                    const entryLocation = document.getElementById('entryLocation').value;
+                    const entryContent = document.getElementById('entryContent').value;
+                    const entryRating = document.getElementById('entryRating').value;
+                    
+                    const newEntry = {
+                        id: Date.now().toString(),
+                        title: entryTitle,
+                        date: entryDate,
+                        location: entryLocation,
+                        content: entryContent,
+                        rating: entryRating,
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    const entries = JSON.parse(localStorage.getItem('journalEntries'));
+                    entries.unshift(newEntry);
+                    localStorage.setItem('journalEntries', JSON.stringify(entries));
+                    
+                    journalForm.reset();
+                    displayJournalEntries();
+                    
+                    alert('Journal entry saved successfully!');
+                });
+                
+                // Update UI
+                displayJournalEntries();
+                
+                // Show success message
+                alert('Journal entry updated successfully!');
+            };
+        };
+
+        // Delete journal entry
+        window.deleteEntry = function(entryId) {
+            if (confirm('Are you sure you want to delete this entry? This action cannot be undone.')) {
+                const entries = JSON.parse(localStorage.getItem('journalEntries'));
+                const updatedEntries = entries.filter(entry => entry.id !== entryId);
+                
+                // Save to local storage
+                localStorage.setItem('journalEntries', JSON.stringify(updatedEntries));
+                
+                // Update UI
+                displayJournalEntries();
+                
+                // Show success message
+                alert('Journal entry deleted successfully!');
+            }
+        };
+
+        // AI Assistant functionality
+        askButton.addEventListener('click', handleAskQuestion);
+        userQuestion.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleAskQuestion();
+            }
+        });
+
+        // Replace this function
+function handleAskQuestion() {
+    const question = userQuestion.value.trim();
+    if (!question) return;
+    
+    // Add user message to chat
+    addMessage(question, 'user');
+    
+    // Clear input
+    userQuestion.value = '';
+    
+    // Add loading indicator
+    const loadingMessage = document.createElement('div');
+    loadingMessage.className = 'message bot-message';
+    loadingMessage.innerHTML = '<div class="loading"></div> Thinking...';
+    chatContainer.appendChild(loadingMessage);
+    
+    // Scroll to bottom of chat
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // Call AI API (example using OpenAI)
+    callAIApi(question)
+        .then(response => {
+            // Remove loading indicator
+            chatContainer.removeChild(loadingMessage);
+            
+            // Add AI response to chat
+            addMessage(response, 'bot');
+        })
+        .catch(error => {
+            // Remove loading indicator
+            chatContainer.removeChild(loadingMessage);
+            
+            // Show error message
+            addMessage("Sorry, I couldn't process your request at the moment. Please try again later.", 'bot');
+            console.error('Error calling AI API:', error);
+        });
+}
+
+// Add this function to call the AI API
+async function callAIApi(question) {
+    // Example using OpenAI API - replace with your preferred AI service
+    const API_KEY = 'YOUR_AI_API_KEY'; // Replace with your actual API key
+    const API_URL = 'https://api.openai.com/v1/chat/completions'; // Or your preferred API endpoint
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo', // Or your preferred model
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are a helpful travel assistant providing concise advice about destinations, travel tips, and recommendations.'
+                    },
+                    {
+                        role: 'user',
+                        content: question
+                    }
+                ],
+                max_tokens: 150,
+                temperature: 0.7
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        return data.choices[0].message.content.trim();
+    } catch (error) {
+        console.error('Error calling AI API:', error);
+        return "I'm having trouble connecting to my knowledge base right now. Please try again later.";
+    }
+}
+
+        function addMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}-message`;
+            messageElement.textContent = text;
+            
+            chatContainer.appendChild(messageElement);
+            
+            // Scroll to bottom of chat
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Simulated AI responses - in a real app, you would use an API
+        function getAIResponse(question) {
+            // Normalize question for matching
+            const normalizedQuestion = question.toLowerCase();
+            
+            // Check for location recommendations
+            if (normalizedQuestion.includes('where') && (normalizedQuestion.includes('go') || normalizedQuestion.includes('visit') || normalizedQuestion.includes('travel'))) {
+                return "Based on your travel preferences, I'd recommend considering Japan for its blend of tradition and modernity, Portugal for amazing food and coastlines, or Costa Rica if you enjoy nature and adventure activities.";
+            }
+            
+            // Check for packing questions
+            if (normalizedQuestion.includes('pack') || normalizedQuestion.includes('bring') || normalizedQuestion.includes('what to take')) {
+                return "Always pack versatile clothing layers, comfortable shoes, a power adapter, photocopies of important documents, and any necessary medications. Don't forget to check the weather forecast for your destination!";
+            }
+            
+            // Check for budget questions
+            if (normalizedQuestion.includes('budget') || normalizedQuestion.includes('cost') || normalizedQuestion.includes('cheap') || normalizedQuestion.includes('expensive')) {
+                return "For budget-friendly destinations, consider Southeast Asia (Thailand, Vietnam), Eastern Europe (Hungary, Poland), or South America (Ecuador, Bolivia). To save money while traveling, try booking in advance, traveling during shoulder season, using public transportation, and eating where locals eat.";
+            }
+            
+            // Check for specific location questions
+            if (normalizedQuestion.includes('paris')) {
+                return "Paris is known for the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. For the best experience, I recommend visiting in spring (April-June) or fall (September-October) to avoid crowds. Don't miss exploring the charming neighborhoods like Montmartre and Le Marais!";
+            }
+            
+            if (normalizedQuestion.includes('japan')) {
+                return "Japan offers an incredible mix of ancient traditions and cutting-edge technology. Visit during cherry blossom season (late March to early April) or fall foliage (November). Try to experience both Tokyo's energy and Kyoto's temples and gardens.";
+            }
+            
+            if (normalizedQuestion.includes('new york') || normalizedQuestion.includes('nyc')) {
+                return "New York City has iconic attractions like Central Park, Times Square, and the Empire State Building. For a local experience, explore neighborhoods like Greenwich Village or Brooklyn. The city is great year-round, but especially beautiful during the holiday season or spring.";
+            }
+            
+            // Check for safety questions
+            if (normalizedQuestion.includes('safe') || normalizedQuestion.includes('safety') || normalizedQuestion.includes('danger')) {
+                return "For safe travels, research your destination beforehand, keep copies of important documents, register with your embassy if traveling internationally, and purchase travel insurance. Trust your instincts and stay aware of your surroundings.";
+            }
+            
+            // Check for food questions
+            if (normalizedQuestion.includes('food') || normalizedQuestion.includes('eat') || normalizedQuestion.includes('cuisine') || normalizedQuestion.includes('restaurant')) {
+                return "For authentic food experiences, eat where locals eat, try street food in places with high turnover, visit local markets, and ask hotel staff for recommendations. Some of the world's best food destinations include Thailand, Italy, Japan, Mexico, and India.";
+            }
+            
+            // Default response
+            return "That's a great question about travel! In a fully implemented version, I would connect to a travel AI API to give you personalized recommendations. Is there anything specific about destinations, accommodations, or travel tips you'd like to know?";
+        }
+
+        // Initialize the page
+        displayJournalEntries();
+        
+        // Set today's date as default
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10);
+        document.getElementById('entryDate').value = formattedDate;
+        // Map functionality
+let map;
+let markers = [];
+let infoWindow;
+const famousPlaces = [
+    {
+        name: "Taj Mahal",
+        location: "Agra, Uttar Pradesh",
+        position: { lat: 27.1751, lng: 78.0421 },
+        description: "One of the seven wonders of the world, the Taj Mahal is a marble mausoleum built by Emperor Shah Jahan in memory of his wife.",
+        tips: "Visit early morning to avoid crowds and get the best lighting for photos. Closed on Fridays."
+    },
+    {
+        name: "City Palace",
+        location: "Jaipur, Rajasthan",
+        position: { lat: 26.9255, lng: 75.8236 },
+        description: "The City Palace was built by Maharaja Sawai Jai Singh II, the ruler of Amber, in 1727.",
+        tips: "Take a guided tour to learn about the royal history. Combine with visits to nearby Jantar Mantar and Hawa Mahal."
+    },
+    {
+        name: "Varanasi Ghats",
+        location: "Varanasi, Uttar Pradesh",
+        position: { lat: 25.3176, lng: 83.0064 },
+        description: "The ghats of Varanasi are riverfront steps leading to the banks of the River Ganges.",
+        tips: "Attend the evening Ganga Aarti ceremony at Dashashwamedh Ghat. Morning boat rides offer amazing views of the sunrise."
+    },
+    {
+        name: "Mysore Palace",
+        location: "Mysore, Karnataka",
+        position: { lat: 12.3052, lng: 76.6552 },
+        description: "Also known as the Amba Vilas Palace, it is the official residence of the Wadiyar dynasty and the seat of the Kingdom of Mysore.",
+        tips: "Visit on Sunday evenings when the palace is illuminated with thousands of lights. Photography is not allowed inside."
+    },
+    {
+        name: "Amber Fort",
+        location: "Jaipur, Rajasthan",
+        position: { lat: 26.9855, lng: 75.8513 },
+        description: "Amber Fort is known for its artistic style elements, blending both Hindu and Muslim (Mughal) elements.",
+        tips: "Take an elephant ride up to the fort entrance for a royal experience. Arrive early to avoid long queues."
+    },
+    {
+        name: "Hawa Mahal",
+        location: "Jaipur, Rajasthan",
+        position: { lat: 26.9239, lng: 75.8267 },
+        description: "The Hawa Mahal is a palace in Jaipur, built so the women of the royal household could observe street festivals while unseen from the outside.",
+        tips: "The best view is from across the street. Visit in the morning when the sun illuminates the front façade."
+    },
+    {
+        name: "Meenakshi Temple",
+        location: "Madurai, Tamil Nadu",
+        position: { lat: 9.9195, lng: 78.1193 },
+        description: "A historic Hindu temple dedicated to Goddess Meenakshi and Lord Sundareswarar.",
+        tips: "Non-Hindus can visit but are restricted from entering the inner sanctum. Don't miss the thousand pillar hall."
+    },
+    {
+        name: "Gateway of India",
+        location: "Mumbai, Maharashtra",
+        position: { lat: 18.9217, lng: 72.8347 },
+        description: "An arch monument built during the 20th century to commemorate the landing of King George V and Queen Mary in December 1911.",
+        tips: "Best visited early morning or sunset. Take a boat from here to visit Elephanta Caves."
+    }
+];
+
+// Initialize Google Maps
+window.initMap = function() {
+    // Center map on India
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 20.5937, lng: 78.9629 },
+        zoom: 5,
+        mapTypeControl: true,
+        fullscreenControl: true,
+        streetViewControl: true
+    });
+    
+    infoWindow = new google.maps.InfoWindow();
+    
+    // Add markers for famous places
+    document.getElementById('showFamousPlaces').addEventListener('click', showFamousPlaces);
+    document.getElementById('showJournalLocations').addEventListener('click', showJournalLocations);
+    
+    // Set up event listeners for gallery items
+    document.querySelectorAll('.view-on-map').forEach(button => {
+        button.addEventListener('click', function() {
+            const lat = parseFloat(this.getAttribute('data-lat'));
+            const lng = parseFloat(this.getAttribute('data-lng'));
+            const locationName = this.closest('.gallery-caption').querySelector('h4').textContent;
+            
+            map.setCenter({ lat, lng });
+            map.setZoom(15);
+            
+            // Find the corresponding place in our data
+            const place = famousPlaces.find(p => 
+                Math.abs(p.position.lat - lat) < 0.001 && 
+                Math.abs(p.position.lng - lng) < 0.001
+            );
+            
+            if (place) {
+                showPlaceInfo(place);
+            }
+            
+            // Scroll to map section
+            document.getElementById('mapSection').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+};
+
+function clearMarkers() {
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+}
+
+function showFamousPlaces() {
+    clearMarkers();
+    
+    famousPlaces.forEach(place => {
+        const marker = new google.maps.Marker({
+            position: place.position,
+            map: map,
+            title: place.name,
+            animation: google.maps.Animation.DROP,
+            icon: {
+                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            }
+        });
+        
+        marker.addListener('click', () => {
+            showPlaceInfo(place);
+        });
+        
+        markers.push(marker);
+    });
+    
+    // Update button styles
+    document.getElementById('showFamousPlaces').classList.add('btn-primary');
+    document.getElementById('showJournalLocations').classList.remove('btn-primary');
+    
+    // Fit map to show all markers
+    const bounds = new google.maps.LatLngBounds();
+    markers.forEach(marker => bounds.extend(marker.getPosition()));
+    map.fitBounds(bounds);
+}
+
+function showJournalLocations() {
+    clearMarkers();
+    
+    const entries = JSON.parse(localStorage.getItem('journalEntries'));
+    const geocoder = new google.maps.Geocoder();
+    
+    // Only process entries with location information
+    const locatedEntries = entries.filter(entry => entry.location && entry.location.trim() !== '');
+    
+    if (locatedEntries.length === 0) {
+        alert('No journal entries with location information found.');
+        return;
+    }
+    
+    // Update button styles
+    document.getElementById('showJournalLocations').classList.add('btn-primary');
+    document.getElementById('showFamousPlaces').classList.remove('btn-primary');
+    
+    let processed = 0;
+    locatedEntries.forEach(entry => {
+        geocoder.geocode({ address: entry.location }, (results, status) => {
+            processed++;
+            
+            if (status === 'OK' && results[0]) {
+                const marker = new google.maps.Marker({
+                    position: results[0].geometry.location,
+                    map: map,
+                    title: entry.title,
+                    animation: google.maps.Animation.DROP,
+                    icon: {
+                        url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    }
+                });
+                
+                marker.addListener('click', () => {
+                    infoWindow.setContent(`
+                        <div>
+                            <h3>${entry.title}</h3>
+                            <p><strong>Date:</strong> ${formatDate(entry.date)}</p>
+                            <p><strong>Location:</strong> ${entry.location}</p>
+                            <p>${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</p>
+                            <button onclick="viewFullEntry('${entry.id}')" style="background-color:#3498db;color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;">View Full Entry</button>
+                        </div>
+                    `);
+                    infoWindow.open(map, marker);
+                });
+                
+                markers.push(marker);
+                
+                // When all entries are processed, fit the map to show all markers
+                if (processed === locatedEntries.length && markers.length > 0) {
+                    const bounds = new google.maps.LatLngBounds();
+                    markers.forEach(marker => bounds.extend(marker.getPosition()));
+                    map.fitBounds(bounds);
+                }
+            } else if (processed === locatedEntries.length && markers.length === 0) {
+                alert('Could not geocode any of your journal locations. Please make sure locations are clearly specified.');
+            }
+        });
+    });
+}
+
+function showPlaceInfo(place) {
+    // Display info in the info panel
+    document.getElementById('locationInfo').innerHTML = `
+        <h4>${place.name}</h4>
+        <p><strong>Location:</strong> ${place.location}</p>
+        <p>${place.description}</p>
+        <div class="travel-tips">
+            <h5>Travel Tips:</h5>
+            <p>${place.tips}</p>
+        </div>
+    `;
+    
+    // Also show info window on the map
+    infoWindow.setContent(`
+        <div>
+            <h3>${place.name}</h3>
+            <p>${place.location}</p>
+            <p>${place.description.substring(0, 100)}${place.description.length > 100 ? '...' : ''}</p>
+        </div>
+    `);
+    
+    infoWindow.setPosition(place.position);
+    infoWindow.open(map);
+}
+
+// Function to view a full journal entry from the map
+window.viewFullEntry = function(entryId) {
+    const entryElement = document.getElementById(`entry-${entryId}`);
+    if (entryElement) {
+        entryElement.scrollIntoView({ behavior: 'smooth' });
+        // Highlight the entry briefly
+        entryElement.style.backgroundColor = '#f8f9fa';
+        setTimeout(() => {
+            entryElement.style.backgroundColor = '';
+        }, 2000);
+    }
+};
+
+// Add a new navigation item for the map page
+document.addEventListener('DOMContentLoaded', function() {
+    const navList = document.querySelector('nav ul');
+    const mapNavItem = document.createElement('li');
+    mapNavItem.innerHTML = '<a href="#mapSection">Map</a>';
+    navList.insertBefore(mapNavItem, navList.children[1]); // Insert after "Journal"
+    
+    // Update Gallery nav item to link to gallery section
+    const galleryNavItem = navList.children[2]; // Should be the Gallery item
+    galleryNavItem.querySelector('a').href = "#gallerySection";
+    
+    // Add class to gallery section for linking
+    document.querySelector('.gallery-section').id = 'gallerySection';
+    
+    // Initialize map if Google Maps API is loaded
+    if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+        initMap();
+    }
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Validation</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="bg-white p-10 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Form Validation</h2>
+    <form id="myForm">
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Username:</label>
+        <input type="text" id="username" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter username">
+        <p class="text-red-500 text-sm mt-1 hidden" id="usernameError">Username is required</p>
+      </div>
+      <div class="mb-4">
+        <label class="block font-medium mb-1">Email:</label>
+        <input type="email" id="email" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter email">
+        <p class="text-red-500 text-sm mt-1 hidden" id="emailError">Enter a valid email</p>
+      </div>
+      <div class="mb-6">
+        <label class="block font-medium mb-1">Password:</label>
+        <input type="password" id="password" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter password">
+        <p class="text-red-500 text-sm mt-1 hidden" id="passwordError">Password must be at least 6 characters</p>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      function validateUsername() {
+        const username = $("#username").val().trim();
+        if (username === "") {
+          $("#usernameError").removeClass("hidden");
+          return false;
+        } else {
+          $("#usernameError").addClass("hidden");
+          return true;
+        }
+      }
+
+      function validateEmail() {
+        const email = $("#email").val().trim();
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(email)) {
+          $("#emailError").removeClass("hidden");
+          return false;
+        } else {
+          $("#emailError").addClass("hidden");
+          return true;
+        }
+      }
+
+      function validatePassword() {
+        const password = $("#password").val();
+        if (password.length < 6) {
+          $("#passwordError").removeClass("hidden");
+          return false;
+        } else {
+          $("#passwordError").addClass("hidden");
+          return true;
+        }
+      }
+
+      // Real-time validation
+      $("#username").on("input", validateUsername);
+      $("#email").on("input", validateEmail);
+      $("#password").on("input", validatePassword);
+
+      $("#myForm").submit(function (e) {
+        e.preventDefault();
+        const isValid =
+          validateUsername() && validateEmail() && validatePassword();
+
+        if (isValid) {
+          alert("Form submitted successfully!");
+          // You can reset or send the form data here
+        }
+      });
+    });
+  </script>
+</body>
+</html>

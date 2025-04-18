@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Journal Assistant</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background-color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .travel-journals {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .journal-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .journal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .journal-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .journal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .journal-card:hover .journal-image img {
+            transform: scale(1.05);
+        }
+
+        .journal-content {
+            padding: 1.5rem;
+        }
+
+        .journal-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .journal-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .journal-date {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .journal-excerpt {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .read-more:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            width: 350px;
+            background-color: white;
+            border-left: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .chatbot-header {
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: var(--dark-color);
+            border-top-left-radius: 4px;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: white;
+            border-top-right-radius: 4px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            margin-left: 0.5rem;
+            padding: 0.8rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.8rem 1rem;
+            background-color: #f1f1f1;
+            border-radius: 18px;
+            align-self: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background-color: #999;
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .chatbot-container {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <div class="logo">WanderLog</div>
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Destinations</a>
+                <a href="#">My Journals</a>
+                <a href="#">About</a>
+            </nav>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search for destinations, experiences...">
+            <button>Search</button>
+        </div>
+
+        <h2>Featured Travel Journals</h2>
+        <div class="travel-journals">
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?paris" alt="Paris">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">A Weekend in Paris</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>Paris, France</span>
+                    </div>
+                    <div class="journal-date">May 15, 2023</div>
+                    <p class="journal-excerpt">Exploring the city of love with its charming streets, delicious pastries, and iconic landmarks...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?tokyo" alt="Tokyo">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">Tokyo Adventures</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>Tokyo, Japan</span>
+                    </div>
+                    <div class="journal-date">March 22, 2023</div>
+                    <p class="journal-excerpt">From the bustling streets of Shibuya to the serene temples, Tokyo is a city of contrasts...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?bali" alt="Bali">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">Bali Retreat</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>Bali, Indonesia</span>
+                    </div>
+                    <div class="journal-date">January 10, 2023</div>
+                    <p class="journal-excerpt">Finding peace in the rice terraces, beaches, and spiritual atmosphere of this island paradise...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?newyork" alt="New York">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">New York City Vibes</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>New York, USA</span>
+                    </div>
+                    <div class="journal-date">November 5, 2022</div>
+                    <p class="journal-excerpt">The city that never sleeps - from Broadway shows to Central Park walks, NYC has it all...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?rome" alt="Rome">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">Roman Holiday</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>Rome, Italy</span>
+                    </div>
+                    <div class="journal-date">September 18, 2022</div>
+                    <p class="journal-excerpt">Walking through history with the Colosseum, Vatican, and endless pasta dishes...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+
+            <div class="journal-card">
+                <div class="journal-image">
+                    <img src="https://source.unsplash.com/random/600x400/?sydney" alt="Sydney">
+                </div>
+                <div class="journal-content">
+                    <h3 class="journal-title">Sydney Sunsets</h3>
+                    <div class="journal-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <span>Sydney, Australia</span>
+                    </div>
+                    <div class="journal-date">July 30, 2022</div>
+                    <p class="journal-excerpt">Bondi Beach, the Opera House, and the stunning coastal walks of this vibrant city...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <div class="chatbot-title">Travel Assistant</div>
+            <button class="chatbot-close">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="message bot-message">
+                Hello! I'm your travel assistant. Ask me about destinations, itineraries, or travel tips. Try keywords like "Paris", "budget travel", or "packing list".
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="user-input" placeholder="Ask me anything about travel...">
+            <button id="send-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Chatbot functionality
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const chatbotClose = document.querySelector('.chatbot-close');
+
+        // Travel-related keywords that will trigger Gemini API
+        const travelKeywords = [
+            'travel', 'trip', 'destination', 'itinerary', 'hotel', 'flight', 
+            'packing', 'luggage', 'visa', 'passport', 'budget', 'cost', 
+            'weather', 'season', 'best time', 'tourist', 'attraction', 
+            'sightseeing', 'culture', 'local food', 'cuisine', 'transportation',
+            'safety', 'tips', 'advice', 'recommend', 'suggest', 'where to go',
+            'what to do', 'how to', 'guide', 'tour', 'adventure', 'beach',
+            'mountain', 'city', 'countryside', 'hiking', 'shopping', 'nightlife',
+            'family', 'solo', 'couple', 'group', 'backpack', 'luxury', 'resort',
+            'hostel', 'airbnb', 'car rental', 'train', 'bus', 'metro', 'subway',
+            'airport', 'customs', 'currency', 'exchange', 'language', 'phrase',
+            'vaccination', 'insurance', 'booking', 'reservation', 'deal', 'discount'
+        ];
+
+        // Add country and city names
+        const destinations = [
+            'paris', 'london', 'new york', 'tokyo', 'bangkok', 'bali', 
+            'rome', 'barcelona', 'dubai', 'singapore', 'sydney', 'berlin',
+            'amsterdam', 'prague', 'vienna', 'venice', 'florence', 'milan',
+            'madrid', 'lisbon', 'athens', 'istanbul', 'cairo', 'cape town',
+            'rio de janeiro', 'buenos aires', 'mexico city', 'toronto',
+            'vancouver', 'montreal', 'chicago', 'los angeles', 'san francisco',
+            'seattle', 'miami', 'boston', 'washington', 'philadelphia',
+            'hong kong', 'shanghai', 'beijing', 'seoul', 'taipei', 'osaka',
+            'kyoto', 'ho chi minh', 'hanoi', 'kuala lumpur', 'jakarta',
+            'manila', 'mumbai', 'delhi', 'bangalore', 'doha', 'abu dhabi',
+            'muscat', 'tel aviv', 'jerusalem', 'dublin', 'edinburgh',
+            'glasgow', 'stockholm', 'oslo', 'copenhagen', 'helsinki',
+            'reykjavik', 'warsaw', 'budapest', 'bucharest', 'sofia', 'zagreb',
+            'belgrade', 'bratislava', 'luxembourg', 'brussels', 'geneva',
+            'zurich', 'munich', 'frankfurt', 'hamburg', 'cologne', 'dusseldorf',
+            'stuttgart', 'nice', 'lyon', 'marseille', 'bordeaux', 'toulouse',
+            'strasbourg', 'lille', 'nantes', 'rennes', 'montpellier', 'cannes',
+            'monaco', 'andorra', 'san marino', 'vatican', 'malta', 'cyprus',
+            'reykjavik', 'torshavn', 'longyearbyen', 'nuuk', 'whitehorse',
+            'yellowknife', 'iqaluit', 'anchorage', 'honolulu', 'auckland',
+            'wellington', 'christchurch', 'queenstown', 'suva', 'papeete',
+            'apia', 'nuku alofa', 'honiara', 'port vila', 'majuro', 'palikir',
+            'yaren', 'tarawa', 'funafuti', 'mata-utu', 'alofi', 'avarua',
+            'adamstown', 'kingston', 'havana', 'nassau', 'bridgetown',
+            'castries', 'st georges', 'port of spain', 'roseau', 'basseterre',
+            'kingstown', 'philipsburg', 'the valley', 'road town', 'cockburn town',
+            'gustavia', 'marigot', 'basse-terre', 'fort-de-france', 'st johns',
+            'st georges', 'hamilton', 'georgetown', 'belmopan', 'san jose',
+            'tegucigalpa', 'managua', 'panama city', 'santo domingo',
+            'san juan', 'willemstad', 'oranjestad', 'kralendijk', 'phillipsburg',
+            'the bottom', 'saint pierre', 'fort-de-france', 'castries',
+            'roseau', 'basseterre', 'st johns', 'st georges', 'kingston',
+            'bridgetown', 'port of spain', 'belmopan', 'san jose', 'tegucigalpa',
+            'managua', 'panama city', 'santo domingo', 'san juan', 'willemstad',
+            'oranjestad', 'kralendijk', 'phillipsburg', 'the bottom',
+            'saint pierre', 'fort-de-france', 'castries', 'roseau', 'basseterre',
+            'st johns', 'st georges', 'kingston', 'bridgetown', 'port of spain',
+            'belmopan', 'san jose', 'tegucigalpa', 'managua', 'panama city',
+            'santo domingo', 'san juan', 'willemstad', 'oranjestad', 'kralendijk',
+            'phillipsburg', 'the bottom', 'saint pierre', 'fort-de-france'
+        ];
+
+        // Sample responses for non-travel queries
+        const outOfScopeResponses = [
+            "I'm sorry, I can only help with travel-related questions. Try asking about destinations, itineraries, or travel tips!",
+            "That's outside my travel expertise. I can help you plan your next adventure if you'd like!",
+            "As a travel assistant, I specialize in travel questions. Want to ask about a destination or travel planning?",
+            "I'm focused on travel topics. Maybe ask me about your next trip?",
+            "Let's keep it travel-related! Need help planning an itinerary or choosing a destination?"
+        ];
+
+        // Add message to chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator');
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            typingDiv.id = 'typing';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) {
+                typing.remove();
+            }
+        }
+
+        // Check if message contains travel keywords
+        function isTravelRelated(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for destination names
+            if (destinations.some(dest => lowerMessage.includes(dest))) {
+                return true;
+            }
+            
+            // Check for travel keywords
+            return travelKeywords.some(keyword => lowerMessage.includes(keyword));
+        }
+
+        // Get a random out of scope response
+        function getOutOfScopeResponse() {
+            return outOfScopeResponses[Math.floor(Math.random() * outOfScopeResponses.length)];
+        }
+
+        // Simulate API call to Gemini (in a real app, you would call the actual API)
+        async function callGeminiAPI(prompt) {
+            // In a real implementation, you would call the Gemini API here
+            // For this demo, we'll simulate a response after a delay
+            
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Simulated responses based on prompt
+            if (prompt.toLowerCase().includes('paris')) {
+                return "Paris is known as the City of Light and is famous for its art, fashion, and cuisine. Must-see attractions include the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. Spring (April-June) is the best time to visit for pleasant weather and fewer crowds. Don't miss trying authentic croissants and visiting Montmartre for its artistic history.";
+            } else if (prompt.toLowerCase().includes('budget') || prompt.toLowerCase().includes('cheap')) {
+                return "Traveling on a budget? Consider these tips:\n1. Travel during off-peak seasons\n2. Stay in hostels or use homestay services\n3. Eat at local markets instead of restaurants\n4. Use public transportation\n5. Look for free walking tours\n6. Prioritize your must-see attractions\n7. Book flights well in advance for the best deals";
+            } else if (prompt.toLowerCase().includes('packing')) {
+                return "Packing essentials for most trips:\n- Versatile clothing that can be layered\n- Comfortable walking shoes\n- Travel-sized toiletries\n- Universal adapter\n- Portable charger\n- Copies of important documents\n- Basic first aid kit\n- Reusable water bottle\nPro tip: Roll your clothes to save space and reduce wrinkles!";
+            } else {
+                // Generic travel response
+                return `Based on your question about "${prompt}", here's what I recommend: When planning travel, it's important to research your destination thoroughly. Check visa requirements, local customs, and weather conditions. Always have travel insurance and keep emergency contacts handy. For specific activities or locations, I can provide more detailed advice if you ask about a particular place or aspect of travel.`;
+            }
+        }
+
+        // Handle user input
+        async function handleUserInput() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            addMessage(message, true);
+            userInput.value = '';
+            
+            showTyping();
+            
+            // Check if message is travel-related
+            if (isTravelRelated(message)) {
+                // Call "Gemini API" (simulated in this demo)
+                const response = await callGeminiAPI(message);
+                hideTyping();
+                addMessage(response, false);
+            } else {
+                // Out of scope response
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(getOutOfScopeResponse(), false);
+                }, 1000);
+            }
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+        // Close chatbot (in a real app, you might minimize instead)
+        chatbotClose.addEventListener('click', () => {
+            document.querySelector('.chatbot-container').classList.add('hidden');
+            // In a real app, you might want to add a button elsewhere to reopen it
+        });
+
+        // Initial greeting
+        setTimeout(() => {
+            addMessage("Need help planning your next adventure? I can suggest destinations, create itineraries, and provide travel tips!", false);
+        }, 1000);
+    </script>
+</body>
+</html>

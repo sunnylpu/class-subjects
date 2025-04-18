@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attribute Manipulation</title>
+</head>
+<body>
+    <img src="image.jpg" id="image" alt="Example Image">
+    <a href="https://example.com">Visit Example</a>
+    <button onclick="changeImage()">Change Image</button>
+    <button onclick="getId()">Get ID</button>
+
+    <script>
+        function changeImage() {
+            document.getElementById("image").src = "new-image.jpg";
+        }
+
+        function getId() {
+            let imgElement = document.getElementById("image");
+            alert("The ID of the image is: " + imgElement.id);
+        }
+        function removeElement(){
+            let para = document.getElementById("paragraph");
+            if(para){
+                document.getElementById("container").removeChild(para);
+            }
+        }
+        <p id="text">Click the button to Highlight me!</p>
+        <button class="highl"
+        
+    </script>
+</body>
+</html>

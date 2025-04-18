@@ -26,10 +26,21 @@
         #eventForm {
             margin: 20px 0;
         }
-        input, button {
+        input, button, select {
             padding: 10px;
             margin: 5px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        select {
+            min-width: 120px;
+        }
+        #eventForm {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
     </style>
 </head>
@@ -39,8 +50,14 @@
 
     <!-- Event Form -->
     <div id="eventForm">
-        <input type="text" id="eventTitle" placeholder="Event Title">
-        <input type="datetime-local" id="eventDate">
+        <input type="text" id="eventTitle" placeholder="Event Title" required>
+        <input type="datetime-local" id="eventDate" required>
+        <select id="eventColor">
+            <option value="#3788d8">Blue</option>
+            <option value="#24b824">Green</option>
+            <option value="#d83939">Red</option>
+        </select>
+        <input type="number" id="reminderMinutes" placeholder="Reminder (minutes before)" min="0" value="10">
         <button onclick="addEvent()">Add Event</button>
     </div>
 
@@ -66,7 +83,9 @@
                     let newEvent = {
                         title: title,
                         start: date,
-                        allDay: false
+                        allDay: false,
+                        color: document.getElementById("eventColor").value,
+                        reminderMinutes: parseInt(document.getElementById("reminderMinutes").value)
                     };
 
                     calendar.addEvent(newEvent);
@@ -94,8 +113,10 @@
                     let eventTime = new Date(event.start);
                     let timeDiff = (eventTime - now) / (1000 * 60); // Difference in minutes
 
-                    if (timeDiff >= 0 && timeDiff < 1) {
-                        alert("Reminder: " + event.title + " is happening now!");
+                    if (timeDiff > 0 && timeDiff <= event.reminderMinutes) {
+                        alert("Reminder: " + event.title + " starting in " + timeDiff + " minutes!");
+                        // Remove after alerting
+                        event.start = new Date(0); // Invalidate event
                     }
                 });
             }, 60000);

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #message{
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <p id="message">original content</p>
+    <button onclick="changetext()"> click me</button>
+    <p class="items">first items</p>
+    <p class="items">second items</p>
+    <script>
+        function changetext(){
+        let paragraph=document.getElementById("message");
+        paragraph.textContent="oops text has been changed";
+        paragraph.style.color="red";
+
+        let items=document.getElementsByClassName("items");
+        items[0].style.color="red";
+
+        let items1=document.querySelectorAll(".item");
+        items1.forEach(items=>{
+
+        }
+    )
+        }
+
+    </script>
+</body>
+</html>

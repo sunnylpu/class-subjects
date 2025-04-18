@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Paragraph Styler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 to-blue-400">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold text-center mb-4 flex items-center justify-center">🎨 Dynamic Paragraph Styler</h2>
+        <div class="space-y-4">
+            <label class="block">Text Color:
+                <select id="textColor" class="w-full p-2 border rounded">
+                    <option value="black">Black</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                </select>
+            </label>
+            <label class="block">Font Size:
+                <select id="fontSize" class="w-full p-2 border rounded">
+                    <option value="text-sm">Small</option>
+                    <option value="text-base">Medium</option>
+                    <option value="text-lg">Large</option>
+                </select>
+            </label>
+            <label class="block">Background Color:
+                <select id="bgColor" class="w-full p-2 border rounded">
+                    <option value="bg-white">White</option>
+                    <option value="bg-gray-200">Gray</option>
+                    <option value="bg-yellow-100">Yellow</option>
+                </select>
+            </label>
+            <button onclick="applyStyles()" class="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded">Apply Styles</button>
+        </div>
+        <div id="paragraph" class="mt-4 p-4 text-black text-base bg-white rounded shadow">This is a sample paragraph. Change my style!</div>
+    </div>
+    <script>
+        function applyStyles() {
+            let textColor = document.getElementById("textColor").value;
+            let fontSize = document.getElementById("fontSize").value;
+            let bgColor = document.getElementById("bgColor").value;
+            
+            let paragraph = document.getElementById("paragraph");
+            paragraph.className = `mt-4 p-4 rounded shadow ${textColor} ${fontSize} ${bgColor}`;
+        }
+    </script>
+</body>
+</html>

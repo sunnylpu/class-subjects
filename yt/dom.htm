@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Button DOM Manipulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+        }
+        
+        button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Button DOM Manipulation Demo</h1>
+    
+    <div>
+        <button id="button1">Button 1</button>
+        <button id="button2">Button 2</button>
+        <button id="button3">Button 3</button>
+    </div>
+    
+    <div id="result">
+        <p>Click any button to see the result.</p>
+    </div>
+    
+    <script>
+
+        const button1 = document.getElementById('button1');
+        const button2 = document.getElementById('button2');
+        const button3 = document.getElementById('button3');
+        const resultDiv = document.getElementById('result');
+        
+
+        button1.addEventListener('click', function() {
+            resultDiv.innerHTML = '<p>Button 1 was clicked!</p>';
+            resultDiv.style.backgroundColor = '#f8d7da';
+            button1.style.backgroundColor = '#dc3545';
+            button1.style.color = 'white';
+            
+
+            resetButtonExcept(1);
+        });
+        
+        button2.addEventListener('click', function() {
+            resultDiv.innerHTML = '<p>Button 2 was clicked!</p>';
+            resultDiv.style.backgroundColor = '#d1ecf1';
+            button2.style.backgroundColor = '#17a2b8';
+            button2.style.color = 'white';
+            
+
+            resetButtonExcept(2);
+        });
+        
+        button3.addEventListener('click', function() {
+            resultDiv.innerHTML = '<p>Button 3 was clicked!</p>';
+            resultDiv.style.backgroundColor = '#d4edda';
+            button3.style.backgroundColor = '#28a745';
+            button3.style.color = 'white';
+            
+
+            resetButtonExcept(3);
+        });
+        
+        function resetButtonExcept(buttonNumber) {
+            const buttons = [button1, button2, button3];
+            const defaultStyle = {
+                backgroundColor: '#f0f0f0',
+                color: 'black'
+            };
+            
+            for (let i = 0; i < buttons.length; i++) {
+                if (i + 1 !== buttonNumber) {
+                    buttons[i].style.backgroundColor = defaultStyle.backgroundColor;
+                    buttons[i].style.color = defaultStyle.color;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
